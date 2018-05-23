@@ -3,105 +3,160 @@ package com.tl.houseinfo;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.tl.views.SeatTable;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
+import com.aspsine.irecyclerview.IRecyclerView;
+import com.aspsine.irecyclerview.OnLoadMoreListener;
+import com.aspsine.irecyclerview.OnRefreshListener;
+import com.tl.adapter.ImageAdapter;
+import com.tl.adapter.OnItemClickListener;
+import com.tl.model.Image;
+import com.tl.network.NetworkAPI;
+import com.tl.utils.ListUtils;
+import com.tl.views.BannerView;
+import com.tl.views.footer.LoadMoreFooterView;
 import java.util.List;
 
-public class MainActivity extends Activity {
-    public SeatTable seatTableView;
+public class MainActivity extends Activity  implements OnItemClickListener<Image>, OnRefreshListener, OnLoadMoreListener {
+
+    private IRecyclerView iRecyclerView;
+    private BannerView bannerView;
+    private LoadMoreFooterView loadMoreFooterView;
+
+    private ImageAdapter mAdapter;
+
+    private int mPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        iRecyclerView = (IRecyclerView) findViewById(R.id.iRecyclerView);
+        iRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        seatTableView = (SeatTable) findViewById(R.id.seatView);
-        seatTableView.setScreenName("8号厅荧幕");//设置屏幕名称
-        seatTableView.setMaxSelected(4);//淘宝电影设置最多4个选中
+//        bannerView = (BannerView) LayoutInflater.from(this).inflate(R.layout.layout_banner_view, iRecyclerView.getHeaderContainer(), false);
+//        iRecyclerView.addHeaderView(bannerView);
 
-        //制造数据
-        final List<ArrayList<Seat>> seatList = new ArrayList<ArrayList<Seat>>();
-        int rows = 15;
-        int column = 15;
-        for (int i = 0; i < rows; i++) {
-            ArrayList<Seat> list = new ArrayList<Seat>();
+        loadMoreFooterView = (LoadMoreFooterView) iRecyclerView.getLoadMoreFooterView();
 
-            for (int j = 0; j < column; j++) {
-                Seat seat = new Seat();
-                seat.setRow(i);
-                seat.setColumn(j);
-                if (j == 2 || j == 7) {
-                    seat.setState(seatTableView.SEAT_TYPE_NOT_AVAILABLE);
-                } else {
-                    seat.setState(seatTableView.SEAT_TYPE_AVAILABLE);
-                }
-                list.add(seat);
+        mAdapter = new ImageAdapter();
+        iRecyclerView.setIAdapter(mAdapter);
+
+        iRecyclerView.setOnRefreshListener(this);
+        iRecyclerView.setOnLoadMoreListener(this);
+
+        mAdapter.setOnItemClickListener(this);
+
+//        iRecyclerView.setRefreshEnabled(false);
+        iRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                iRecyclerView.setRefreshing(true);
             }
-            seatList.add(list);
+        });
+    }
+
+
+    @Override
+    public void onItemClick(int position, Image image, View v) {
+        mAdapter.remove(position);
+        Toast.makeText(this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+//        loadBanner();
+        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+        refresh();
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (loadMoreFooterView.canLoadMore() && mAdapter.getItemCount() > 0) {
+            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            loadMore();
         }
-        seatList.get(1).get(5).setState(seatTableView.SEAT_TYPE_SOLD);
+    }
 
-        seatTableView.setSeatChecker(new SeatTable.SeatChecker() {
 
+
+    private void loadBanner() {
+        NetworkAPI.requestBanners(new NetworkAPI.Callback<List<Image>>() {
             @Override
-            public boolean isValidSeat(int row, int column) {
-//                Log.d("wangfeng", "isValidSeat row: " + row + " column: " + column);
-
-//                if(column == 2) {
-//                    return false;
-//                }
-//                if(column == 8) {
-//                    return false;
-//                }
-                if (seatList.get(row).get(column).getState() == SeatTable.SEAT_TYPE_NOT_AVAILABLE) {
-                    return false;
+            public void onSuccess(List<Image> images) {
+                if (!ListUtils.isEmpty(images)) {
+                    bannerView.setList(images);
                 }
-                return true;
             }
 
             @Override
-            public boolean isSold(int row, int column) {
-//                if(row == 0 && column == 0){
-//                    return true;
-//                }
-                if (seatList.get(row).get(column).getState() == SeatTable.SEAT_TYPE_SOLD) {
-                    return true;
-                }
-
-                return false;
-            }
-
-            @Override
-            public void checked(int row, int column) {
-                Log.d("wangfeng", "checked row: " + row + " column: " + column);
-
-            }
-
-            @Override
-            public void unCheck(int row, int column) {
-                Log.d("wangfeng", "unCheck row: " + row + " column: " + column);
-
-            }
-
-            @Override
-            public String[] checkedSeatTxt(int row, int column) {
-//                Log.d("wangfeng", "checkedSeatTxt row: " + row + " column: " + column);
-                return null;
-            }
-
-        });
-        seatTableView.setSeatTextBySelf(new SeatTable.SeatTextBySelf() {
-            @Override
-            public void drawText(Canvas canvas, int row, int column, float top, float left) {
-                String rowText = row + 1 + "排";
-                String columnText = column + 1 + "座";
-                seatTableView.drawText(canvas, row, column, top, left, rowText, columnText);
+            public void onFailure(Exception e) {
+                e.printStackTrace();
             }
         });
-        seatTableView.setData(seatList.size(), seatList.get(0).size());
+    }
+
+    private void refresh() {
+        mPage = 1;
+        NetworkAPI.requestImages(mPage, new NetworkAPI.Callback<List<Image>>() {
+            @Override
+            public void onSuccess(List<Image> images) {
+                iRecyclerView.setRefreshing(false);
+                if (ListUtils.isEmpty(images)) {
+                    mAdapter.clear();
+                } else {
+                    mPage = 2;
+                    mAdapter.setList(images);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                e.printStackTrace();
+                iRecyclerView.setRefreshing(false);
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadMore() {
+        NetworkAPI.requestImages(mPage, new NetworkAPI.Callback<List<Image>>() {
+            @Override
+            public void onSuccess(final List<Image> images) {
+                if (ListUtils.isEmpty(images)) {
+                    loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                } else {
+
+//                    mPage++;
+//                    loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+//                    mAdapter.append(images);
+                    /**
+                     * FIXME here we post delay to see more animation, you don't need to do this.
+                     */
+                    loadMoreFooterView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPage++;
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                            mAdapter.append(images);
+                        }
+                    }, 2000);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                e.printStackTrace();
+                loadMoreFooterView.setStatus(LoadMoreFooterView.Status.ERROR);
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.aspsine.irecyclerview.IRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/iRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-
-    <com.tl.views.SeatTable
-        android:id="@+id/seatView"
-        android:background="#ffffff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-</RelativeLayout>
+    app:loadMoreEnabled="true"
+    app:loadMoreFooterLayout="@layout/layout_irecyclerview_load_more_footer"
+    app:refreshEnabled="true"
+    app:refreshHeaderLayout="@layout/layout_irecyclerview_refresh_header"
+    tools:context="com.tl.houseinfo.MainActivity" />
