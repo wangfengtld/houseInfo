@@ -2,9 +2,7 @@ package com.aspsine.irecyclerview;
 
 import android.animation.Animator;
 
-/**
- * Created by aspsine on 16/3/13.
- */
+
 public class SimpleAnimatorListener implements Animator.AnimatorListener {
     @Override
     public void onAnimationStart(Animator animation) {

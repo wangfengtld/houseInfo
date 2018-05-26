@@ -9,9 +9,7 @@ import android.widget.ImageView;
 import com.aspsine.irecyclerview.RefreshTrigger;
 import com.tl.houseinfo.R;
 
-/**
- * Created by aspsine on 16/4/7.
- */
+
 public class BatVsSupperHeaderView extends FrameLayout implements RefreshTrigger {
 
     private ImageView ivBatMan;

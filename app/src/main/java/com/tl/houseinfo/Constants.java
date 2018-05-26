@@ -1,8 +1,6 @@
 package com.tl.houseinfo;
 
-/**
- * Created by aspsine on 16/4/6.
- */
+
 public class Constants {
     private static final String GITHUB = "https://raw.githubusercontent.com/";
     private static final String AUTHOR = "Aspsine";

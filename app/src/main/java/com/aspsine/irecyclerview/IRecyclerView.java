@@ -22,9 +22,7 @@ import android.widget.LinearLayout;
 
 import com.tl.houseinfo.R;
 
-/**
- * Created by aspsine on 16/3/3.
- */
+
 public class IRecyclerView extends RecyclerView {
     private static final String TAG = IRecyclerView.class.getSimpleName();
 

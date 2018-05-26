@@ -3,9 +3,7 @@ package com.aspsine.irecyclerview;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/**
- * Created by aspsine on 16/3/12.
- */
+
 public abstract class IViewHolder extends RecyclerView.ViewHolder {
 
     public IViewHolder(View itemView) {

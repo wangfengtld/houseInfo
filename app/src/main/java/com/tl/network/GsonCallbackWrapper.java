@@ -13,9 +13,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * Created by aspsine on 16/4/7.
- */
+
 public class GsonCallbackWrapper<T> implements okhttp3.Callback {
 
     private static final Handler sHandler = new Handler(Looper.getMainLooper());

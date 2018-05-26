@@ -8,9 +8,7 @@ import android.view.WindowManager;
 
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * Created by aspsine on 15-3-13.
- */
+
 public class DensityUtils {
 
     public static int getScreenWidth(Context context) {

@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 
-/**
- * Created by aspsine on 16/3/7.
- */
+
 public class RefreshHeaderLayout extends ViewGroup {
 
     public RefreshHeaderLayout(Context context) {

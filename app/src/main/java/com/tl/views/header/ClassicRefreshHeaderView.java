@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.aspsine.irecyclerview.RefreshTrigger;
 import com.tl.houseinfo.R;
 
-/**
- * Created by aspsine on 16/3/14.
- */
+
 public class ClassicRefreshHeaderView extends RelativeLayout implements RefreshTrigger {
     private ImageView ivArrow;
 

@@ -22,9 +22,7 @@ import com.tl.model.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by aspsine on 16/4/5.
- */
+
 public class BannerView extends FrameLayout {
 
     private ViewPager viewPager;

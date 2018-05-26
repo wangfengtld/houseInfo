@@ -11,9 +11,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.tl.network.OkHttp;
 
 
-/**
- * Created by aspsine on 16/4/6.
- */
+
 public class App extends Application {
 
     @Override

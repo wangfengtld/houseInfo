@@ -9,9 +9,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-/**
- * Created by aspsine on 16/4/6.
- */
+
 public class NetworkAPI {
 
     public static void requestImages(int page, final Callback<List<Image>> callback) {

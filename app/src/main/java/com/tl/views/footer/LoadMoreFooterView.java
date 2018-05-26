@@ -9,9 +9,7 @@ import android.widget.FrameLayout;
 import com.tl.houseinfo.R;
 
 
-/**
- * Created by aspsine on 16/3/14.
- */
+
 public class LoadMoreFooterView extends FrameLayout {
 
     private Status mStatus;

@@ -16,9 +16,7 @@ import com.tl.model.Image;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by aspsine on 16/4/5.
- */
+
 public class ImageAdapter extends RecyclerView.Adapter<IViewHolder> {
 
     private List<Image> mImages;
