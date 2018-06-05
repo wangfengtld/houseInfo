@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">houseInfo</string>
+
+
+    <string name="flash_tv1">北京市共有产权住房公证信息平台</string>
+    <string name="flash_tv2">Beijing public property rights housing notarization</string>
+    <string name="flash_tv3">information platform!</string>
+    <string name="flash_ll_tv1">方圆公证</string>
+    <string name="flash_ll_tv2">FANGYUAN NOTRRY</string>
+    <string name="flash_slogan1">和谐沟通</string>
+    <string name="flash_slogan2">成就方圆</string>
 </resources>
