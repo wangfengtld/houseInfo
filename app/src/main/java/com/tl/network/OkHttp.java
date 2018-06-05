@@ -3,6 +3,8 @@ package com.tl.network;
 import android.content.Context;
 
 
+import com.parkingwang.okhttp3.LogInterceptor.LogInterceptor;
+import com.tl.houseinfo.BuildConfig;
 import com.tl.utils.FileUtils;
 
 import okhttp3.Cache;
@@ -16,9 +18,14 @@ public class OkHttp {
     public static void init(Context context) {
         Context applicationContext = context.getApplicationContext();
 
-        sOkHttpClient = new OkHttpClient.Builder()
-                .cache(new Cache(FileUtils.getHttpCacheDir(applicationContext), MAX_CACHE_SIZE))
-                .build();
+
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+            .cache(new Cache(FileUtils.getHttpCacheDir(applicationContext), MAX_CACHE_SIZE));
+
+        if (BuildConfig.DEBUG) {
+            clientBuilder.addInterceptor(new LogInterceptor());
+        }
+        sOkHttpClient = clientBuilder.build();
     }
 
     public static OkHttpClient getOkHttpClient() {

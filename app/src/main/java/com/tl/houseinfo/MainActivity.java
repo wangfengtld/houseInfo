@@ -17,7 +17,13 @@ import com.aspsine.irecyclerview.OnLoadMoreListener;
 import com.aspsine.irecyclerview.OnRefreshListener;
 import com.tl.adapter.ImageAdapter;
 import com.tl.adapter.OnItemClickListener;
+import com.tl.model.Area;
+import com.tl.model.GetAreaList;
+import com.tl.model.GetHouseEstatesByProject;
+import com.tl.model.GetProjectsByArea;
+import com.tl.model.HouseEstate;
 import com.tl.model.Image;
+import com.tl.model.Project;
 import com.tl.network.NetworkAPI;
 import com.tl.utils.ListUtils;
 import com.tl.views.BannerView;
@@ -104,26 +110,67 @@ public class MainActivity extends Activity  implements OnItemClickListener<Image
     }
 
     private void refresh() {
-        mPage = 1;
-        NetworkAPI.requestImages(mPage, new NetworkAPI.Callback<List<Image>>() {
+//        mPage = 1;
+//        NetworkAPI.requestImages(mPage, new NetworkAPI.Callback<List<Image>>() {
+//            @Override
+//            public void onSuccess(List<Image> images) {
+//                iRecyclerView.setRefreshing(false);
+//                if (ListUtils.isEmpty(images)) {
+//                    mAdapter.clear();
+//                } else {
+//                    mPage = 2;
+//                    mAdapter.setList(images);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Exception e) {
+//                e.printStackTrace();
+//                iRecyclerView.setRefreshing(false);
+//                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
+        NetworkAPI.requestAreaList(new NetworkAPI.Callback<GetAreaList<Area>>() {
             @Override
-            public void onSuccess(List<Image> images) {
-                iRecyclerView.setRefreshing(false);
-                if (ListUtils.isEmpty(images)) {
-                    mAdapter.clear();
-                } else {
-                    mPage = 2;
-                    mAdapter.setList(images);
-                }
+            public void onSuccess(GetAreaList<Area> getAreaList) {
+
+                Log.d("message", "success......" + getAreaList.getCode());
+
             }
 
             @Override
             public void onFailure(Exception e) {
-                e.printStackTrace();
-                iRecyclerView.setRefreshing(false);
-                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                Log.d("message", "failed......");
+
             }
         });
+
+        NetworkAPI.requestProjectsByArea(1, new NetworkAPI.Callback<GetProjectsByArea<Project>>() {
+            @Override
+            public void onSuccess(GetProjectsByArea<Project> projectGetProjectsByArea) {
+                Log.d("message", "success......" + projectGetProjectsByArea.getCode());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("message", "failed......");
+            }
+        });
+
+        NetworkAPI.requestHouseEstatesByProject(3, new NetworkAPI.Callback<GetHouseEstatesByProject<HouseEstate>>() {
+            @Override
+            public void onSuccess(GetHouseEstatesByProject<HouseEstate> getHouseEstatesByProject) {
+                Log.d("message", "success......" + getHouseEstatesByProject.getCode());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("message", "failed......");
+            }
+        });
+
     }
 
     private void loadMore() {

@@ -16,6 +16,7 @@ public class FlashActivity extends Activity {
             @Override
             public void run() {
                 startActivity(new Intent(FlashActivity.this,  MainActivity.class));
+                finish();
             }
         }, 1000);
     }

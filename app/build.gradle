@@ -22,6 +22,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     api 'com.squareup.okhttp3:okhttp:3.10.0'
+    api 'com.parkingwang:okhttp3-loginterceptor:latest.integration'
+
     api 'org.immutables:gson:2.6.0'
     api 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     api 'com.android.support:recyclerview-v7:25.1.1'
