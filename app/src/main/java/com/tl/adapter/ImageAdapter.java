@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aspsine.irecyclerview.IViewHolder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tl.houseinfo.R;
+import com.tl.model.Area;
 import com.tl.model.Image;
+import com.tl.model.Project;
 
 
 import java.util.ArrayList;
@@ -19,27 +22,27 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<IViewHolder> {
 
-    private List<Image> mImages;
+    private List<Project> mlists;
 
-    private OnItemClickListener<Image> mOnItemClickListener;
+    private OnItemClickListener<Project> mOnItemClickListener;
 
     public ImageAdapter() {
-        mImages = new ArrayList<>();
+        mlists = new ArrayList<>();
     }
 
-    public void setOnItemClickListener(OnItemClickListener<Image> listener) {
+    public void setOnItemClickListener(OnItemClickListener<Project> listener) {
         this.mOnItemClickListener = listener;
     }
 
-    public void setList(List<Image> images) {
-        mImages.clear();
-        append(images);
+    public void setList(List<Project> list) {
+        mlists.clear();
+        append(list);
     }
 
-    public void append(List<Image> images) {
-        int positionStart = mImages.size();
-        int itemCount = images.size();
-        mImages.addAll(images);
+    public void append(List<Project> list) {
+        int positionStart = mlists.size();
+        int itemCount = list.size();
+        mlists.addAll(list);
         if (positionStart > 0 && itemCount > 0) {
             notifyItemRangeInserted(positionStart, itemCount);
         } else {
@@ -48,35 +51,28 @@ public class ImageAdapter extends RecyclerView.Adapter<IViewHolder> {
     }
 
     public void remove(int position) {
-        mImages.remove(position);
+        mlists.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void clear(){
-        mImages.clear();
+    public void clear() {
+        mlists.clear();
         notifyDataSetChanged();
     }
 
     @Override
     public IViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ImageView imageView = (ImageView) LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_image_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
 
-        final ViewHolder holder = new ViewHolder(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        final ViewHolder holder = new ViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * Note:
-                 * in order to get the right position, you must use the method with i- prefix in
-                 * {@link IViewHolder} eg:
-                 * {@code IViewHolder.getIPosition()}
-                 * {@code IViewHolder.getILayoutPosition()}
-                 * {@code IViewHolder.getIAdapterPosition()}
-                 */
+
                 final int position = holder.getIAdapterPosition();
-                final Image image = mImages.get(position);
+                final Project project = mlists.get(position);
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(position, image, v);
+                    mOnItemClickListener.onItemClick(position, project, v);
                 }
             }
         });
@@ -85,30 +81,42 @@ public class ImageAdapter extends RecyclerView.Adapter<IViewHolder> {
 
     @Override
     public void onBindViewHolder(IViewHolder holder, int position) {
-        ImageView imageView = (ImageView) holder.itemView;
-        Image image = mImages.get(position);
-//        Glide.with(imageView.getContext()).load(image.image).dontAnimate().into(imageView);
-        // 创建DisplayImageOptions对象并进行相关选项配置
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.mipmap.ic_launcher)
-                .showImageForEmptyUri(R.mipmap.ic_launcher)// 设置图片Uri为空或是错误的时候显示的图片
-                    .showImageOnFail(R.mipmap.ic_launcher)// 设置图片加载或解码过程中发生错误显示的图片
-                    .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
-                    .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
-//                    .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
-                .build();
-        ImageLoader.getInstance().displayImage(image.image, imageView, options);
+        ViewHolder viewHolder = (ViewHolder) holder;
+        Project project = mlists.get(position);
+
+//        // 创建DisplayImageOptions对象并进行相关选项配置
+//        DisplayImageOptions options = new DisplayImageOptions.Builder()
+//            .showImageOnLoading(R.mipmap.ic_launcher)
+//            .showImageForEmptyUri(R.mipmap.ic_launcher)// 设置图片Uri为空或是错误的时候显示的图片
+//            .showImageOnFail(R.mipmap.ic_launcher)// 设置图片加载或解码过程中发生错误显示的图片
+//            .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
+//            .cacheOnDisk(true)// 设置下载的图片是否缓存在SD卡中
+////                    .displayer(new RoundedBitmapDisplayer(20))// 设置成圆角图片
+//            .build();
+//        ImageLoader.getInstance().displayImage(image.image, imageView, options);
+
+        viewHolder.projectName.setText(project.getName());
+
+
     }
 
     @Override
     public int getItemCount() {
-        return mImages.size();
+        return mlists.size();
     }
 
     static class ViewHolder extends IViewHolder {
 
+        ImageView iv;
+        TextView  projectName;
+        TextView  isEnd;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            iv = (ImageView) itemView.findViewById(R.id.imageView);
+            projectName = (TextView) itemView.findViewById(R.id.tv_project);
+            isEnd = (TextView) itemView.findViewById(R.id.tv_isEnd);
+
         }
     }
 }

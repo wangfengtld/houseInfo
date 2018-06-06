@@ -10,5 +10,7 @@
 
     <color name="activity_background">#f4f4f4</color>
     <color name="indexText">#992d2a</color>
+    <color name="tab_back">#992d2a</color>
+
 
 </resources>

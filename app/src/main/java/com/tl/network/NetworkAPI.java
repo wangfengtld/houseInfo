@@ -20,7 +20,8 @@ import okhttp3.RequestBody;
 
 public class NetworkAPI {
 
-    private static String HOST = "https://www.weiyouming.com:8080/api/";
+    private static String HOST = "https://publicapi.weiyouming.com/api/";
+
     public static void requestImages(int page, final Callback<List<Image>> callback) {
         String url = Constants.ImagesAPI(page);
         final Request request = new Request.Builder().get().url(url).build();
@@ -38,7 +39,7 @@ public class NetworkAPI {
     public static void requestAreaList(final Callback<GetAreaList<Area>> callback) {
         String url = HOST + "GetAreaList";
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("CityName","");
+        builder.add("CityName", "");
         RequestBody formBody = builder.build();
 //        String token = "";
         final Request request = new Request.Builder().post(formBody).url(url).build();
@@ -49,7 +50,22 @@ public class NetworkAPI {
     public static void requestProjectsByArea(int areaId, final Callback<GetProjectsByArea<Project>> callback) {
         String url = HOST + "GetProjectsByArea";
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("AreaId",areaId + "");
+        builder.add("AreaId", areaId + "");
+        RequestBody formBody = builder.build();
+        //        String token = "";
+        final Request request = new Request.Builder().post(formBody).url(url).build();
+        OkHttp.getOkHttpClient().
+
+            newCall(request).
+
+            enqueue(new GsonCallbackWrapper<GetProjectsByArea<Project>>(callback, new TypeToken<GetProjectsByArea<Project>>() {
+            }));
+    }
+
+    public static void requestProjectsByArea(final Callback<GetProjectsByArea<Project>> callback) {
+        String url = HOST + "GetProjectsByArea";
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("AreaId", "");
         RequestBody formBody = builder.build();
 //        String token = "";
         final Request request = new Request.Builder().post(formBody).url(url).build();
@@ -60,7 +76,7 @@ public class NetworkAPI {
     public static void requestHouseEstatesByProject(int projectId, final Callback<GetHouseEstatesByProject<HouseEstate>> callback) {
         String url = HOST + "GetHouseEstatesByProject";
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("ProjectId",projectId + "");
+        builder.add("ProjectId", projectId + "");
         RequestBody formBody = builder.build();
 //        String token = "";
         final Request request = new Request.Builder().post(formBody).url(url).build();

@@ -24,7 +24,6 @@ public class App extends Application {
 
 
     private void initImageLoader(Context context) {
-        // TODO Auto-generated method stub
         // 创建DisplayImageOptions对象
         DisplayImageOptions defaulOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true).cacheOnDisk(true).build();
